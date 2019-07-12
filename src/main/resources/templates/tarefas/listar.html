@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Gerenciador de tarefas - Listagem</title>
+<link rel="Stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css">
+</head>
+<body>
+	<div th:replace="fragmentos/fragmentos :: cabecalho"></div>
+	<div class="container">
+		<h3>Listagem de Tarefas</h3>
+		<a href="/tarefas/inserir" class="btn btn-success">Registrar nova tarefa</a>
+		<div th:each="tarefa: ${listar}">
+			<div class="card bg-light mb-3" style="margin: 10px">
+				<div class="card-header" th:text="${tarefa.titulo}"></div>
+				<div class="card-body">
+					<p class="card-text" th:text="${tarefa.descricao}"></p>
+					<p class="card-text" th:text="${'Data de expiração: ' + #dates.format(tarefa.dataExpiracao, 'dd/MM/yyyy')}"></p>
+					<p class="card-text" style="color: green;" th:if="${tarefa.dataExpiracao.after(new java.util.Date())}">Em dia</p>
+					<p class="card-text" style="color: red;" th:if="${tarefa.dataExpiracao.before(new java.util.Date())}">Atrasada</p>
+				</div>
+				<div class="card-footer bg-ligth">
+					<p>
+						<a th:href="@{/tarefas/alterar/{id}(id=${tarefa.id})}">Alterar</a>&nbsp;|
+						<a th:href="@{/tarefas/excluir/{id}(id=${tarefa.id})}">Excluir</a>&nbsp;|
+						<a th:if="${!tarefa.concluida}" th:href="@{/tarefas/concluir/{id}(id=${tarefa.id})}">Concluir</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="/webjars/jquery/3.4.1/jquery.min.js"></script>
+	<script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+</body>
+</html>
